@@ -1,0 +1,117 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: easycard-service-user
+  #zipkin配置
+  zipkin:
+    # zipkin server的请求地址
+    base-url: http://127.0.0.1:9411
+    sender:
+      # web 客户端将踪迹⽇志数据通过⽹络请求的⽅式传送到服务端
+      # kafka/rabbit 客户端将踪迹⽇志数据传递到mq进⾏中转
+      type: web
+  #sleuth配置
+  sleuth:
+    sampler:
+      # 采样率 1 代表100%全部采集 ，默认0.1 代表10% 的请求踪迹数据会被采集
+      # ⽣产环境下，请求量⾮常⼤，没有必要所有请求的踪迹数据都采集分析，
+      # 对于⽹络包括server端压⼒都是⽐较⼤的，可以配置采样率采集⼀定⽐例的请求的踪迹数据进⾏分析即可
+      probability: 1
+
+#向Eureka服务中⼼注册服务
+eureka:
+  instance:
+    hostname: localhost
+    #配置使用IP注册，否则会使用主机名注册。
+    prefer-ip-address: true
+    #自定义实例在Eureka中显示的服务名称
+    instance-id: ${spring.cloud.client.ip-address}:${spring.application.name}:${server.port}
+    #服务提供者续约配置，续约间隔时间，默认为30秒
+    lease-renewal-interval-in-seconds: 30
+    #租约到期时间，默认为90秒。服务超过90秒没有发生心跳（报活），EurekaServer会将服务从列表中移除
+    lease-expiration-duration-in-seconds: 90
+  client:
+    service-url:
+      #Eureka注册中心注册链接,多个使用英文逗号间隔
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+    #服务消费者每隔多久拉取一次服务列表，默认30秒拉取一次
+    registry-fetch-interval-seconds: 30
+
+#针对easycard-service-card做ribbon负责配置，不指定服务名，则全局生效
+easycard-service-card:
+  ribbon:
+    #请求连接超时时间
+    ConnectTimeout: 2000
+    #请求处理超时时间
+    ReadTimeout: 5000
+    #对所有操作都进⾏重试
+    OkToRetryOnAllOperations: true
+    ####根据如上配置，当访问到故障请求的时候，它会再尝试访问⼀次当前实例（次数由MaxAutoRetries配置），
+    ####如果不⾏，就换⼀个实例进⾏访问，如果还不⾏，再换⼀次实例访问（更换次数由MaxAutoRetriesNextServer配置），
+    ####如果依然不⾏，返回失败信息。
+    #对当前选中实例重试次数，不包括第⼀次调⽤
+    MaxAutoRetries: 0
+    #切换实例的重试次数
+    MaxAutoRetriesNextServer: 0
+    #负载策略调整
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
+
+# 配置熔断策略：
+hystrix:
+  command:
+    default:
+      circuitBreaker:
+        #强制打开熔断器，如果该属性设置为true，强制断路器进⼊打开状态，将会拒绝所有的请求。
+        #默认false关闭的
+        forceOpen: false
+        # 触发熔断错误⽐例阈值，默认值50%
+        errorThresholdPercentage: 50
+        # 熔断后休眠时⻓，默认值5秒。（⾃我修复时的活动窗⼝⻓度）
+        sleepWindowInMilliseconds: 3000
+        # 熔断触发最⼩请求次数，默认值是20（统计时间窗⼝内的最⼩请求数）
+        requestVolumeThreshold: 2
+      execution:
+        isolation:
+          thread:
+            # 熔断超时设置，默认为1秒
+            timeoutInMilliseconds: 2000
+
+# 开启Feign的熔断功能
+feign:
+  hystrix:
+    enabled: true
+  #feign压缩配置
+  compression:
+    request:
+      # 开启请求压缩
+      enabled: true
+      # 设置压缩的数据类型，此处也是默认值
+      mime-types: text/html,application/xml,application/json
+      # 设置触发压缩的⼤⼩下限，此处也是默认值
+      min-request-size: 2048
+    response:
+      # 开启响应压缩
+      enabled: true
+
+#日记配置
+logging:
+  #配置日志级别
+  level:
+    # Feign⽇志只会对⽇志级别为debug的做出响应。这里指定到对应的feign client
+    com.otoomo.easycard.cloud.userservice.feignclient.CardServiceFeignClient: debug
+    #分布式链路追踪
+    org.springframework.web.servlet.DispatcherServlet: debug
+    org.springframework.cloud.sleuth: debug
+
+# springboot中暴露健康检查接⼝
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  # 暴露健康接⼝的细节
+  endpoint:
+    health:
+      show-details: always

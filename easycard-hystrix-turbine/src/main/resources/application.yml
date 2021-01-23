@@ -1,0 +1,28 @@
+server:
+  port: 9001
+spring:
+  application:
+    name: easycard-hystrix-turbine
+
+#向Eureka服务中⼼注册服务
+eureka:
+  instance:
+    hostname: localhost
+    #配置使用IP注册，否则会使用主机名注册。
+    prefer-ip-address: true
+    #自定义实例在Eureka中显示的服务名称
+    instance-id: ${spring.cloud.client.ip-address}:${spring.application.name}:${server.port}
+  client:
+    service-url:
+      #Eureka注册中心注册链接,多个使用英文逗号间隔
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+    #服务消费者每隔多久拉取一次服务列表，默认30秒拉取一次
+    registry-fetch-interval-seconds: 30
+
+#turbine配置
+turbine:
+  #appCofing配置需要聚合的服务名称，⽐如这⾥聚合 service-user 的hystrix监控数据
+  #如果要聚合多个微服务的监控数据，那么可以使⽤英⽂逗号拼接，⽐如 a,b,c
+  appConfig: easycard-service-user
+  # 集群默认名称
+  clusterNameExpression: "'default'"

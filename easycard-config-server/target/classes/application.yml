@@ -1,0 +1,51 @@
+server:
+  port: 9006
+spring:
+  application:
+    name: easycard-config-server
+  cloud:
+    # 配置配置中心
+    #测试访问：http://localhost:9006/master/easycard-user-service-dev.yml，查看到配置⽂件内容
+    config:
+      server:
+        git:
+          #配置git服务地址
+          uri: https://github.com/modongning/easycard-config-repo.git
+          #配置git⽤户名
+          username: modongning@163.com
+          #配置git密码
+          password: 123456
+          search-paths:
+            - easycard-config-repo
+          #执行读取的分⽀
+          label: master
+
+#向Eureka服务中⼼注册服务
+eureka:
+  instance:
+    hostname: localhost
+    #配置使用IP注册，否则会使用主机名注册。
+    prefer-ip-address: true
+    #自定义实例在Eureka中显示的服务名称
+    instance-id: ${spring.cloud.client.ip-address}:${spring.application.name}:${server.port}
+    #服务提供者续约配置，续约间隔时间，默认为30秒
+    lease-renewal-interval-in-seconds: 30
+    #租约到期时间，默认为90秒。服务超过90秒没有发生心跳（报活），EurekaServer会将服务从列表中移除
+    lease-expiration-duration-in-seconds: 90
+  client:
+    service-url:
+      #Eureka注册中心注册链接,多个使用英文逗号间隔
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+    #服务消费者每隔多久拉取一次服务列表，默认30秒拉取一次
+    registry-fetch-interval-seconds: 30
+
+# springboot中暴露健康检查接⼝
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  # 暴露健康接⼝的细节
+  endpoint:
+    health:
+      show-details: always

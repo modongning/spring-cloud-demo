@@ -1,0 +1,68 @@
+server:
+  port: 9010
+
+spring:
+  application:
+    name: easycard-gateway-server-alibaba
+  cloud:
+    gateway:
+      #配置路由，类似Nginx的server
+      routes:
+        - id: easycard-service-user-alibab # 路由ID，保证全局唯一即可
+          ## lb://服务标识。启动负载均衡的方式请求
+          uri: lb://easycard-service-user-alibaba
+          # 断言，类似Nginx的location
+          predicates:
+            - Path=/api/user/**
+          filters:
+            # StripPrefix=1 配置这个之后，会把请求中的uri的/user的路径给去掉，然后发起请求:
+            # 如请求： http://127.0.0.1:9002/user/getUserCardList/1 ===会转换为=>>> http://127.0.0.1:8080/getUserCardList/1
+            - StripPrefix=1
+        - id: easycard-service-card-alibaba
+          uri: lb://easycard-service-card-alibab
+          predicates:
+            - Path=/api/card/**
+          filters:
+            - StripPrefix=1
+
+    # 配置nacos
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        namespace: easycard-dev
+
+  #zipkin配置
+  zipkin:
+    # zipkin server的请求地址
+    base-url: http://127.0.0.1:9411
+    sender:
+      # web 客户端将踪迹⽇志数据通过⽹络请求的⽅式传送到服务端
+      # kafka/rabbit 客户端将踪迹⽇志数据传递到mq进⾏中转
+      type: web
+
+  #sleuth配置
+  sleuth:
+    sampler:
+      # 采样率 1 代表100%全部采集 ，默认0.1 代表10% 的请求踪迹数据会被采集
+      # ⽣产环境下，请求量⾮常⼤，没有必要所有请求的踪迹数据都采集分析，
+      # 对于⽹络包括server端压⼒都是⽐较⼤的，可以配置采样率采集⼀定⽐例的请求的踪迹数据进⾏分析即可
+      probability: 1
+
+#日记配置
+logging:
+  #配置日志级别
+  level:
+    #分布式链路追踪
+    org.springframework.web.servlet.DispatcherServlet: debug
+    org.springframework.cloud.sleuth: debug
+
+# springboot中暴露健康检查接⼝
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  # 暴露健康接⼝的细节
+  endpoint:
+    health:
+      show-details: always

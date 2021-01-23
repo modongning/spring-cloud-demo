@@ -1,0 +1,31 @@
+server:
+  port: 9411
+spring:
+  application:
+    name: easycard-zipkin-server
+
+#向Eureka服务中⼼注册服务
+eureka:
+  instance:
+    hostname: localhost
+    #配置使用IP注册，否则会使用主机名注册。
+    prefer-ip-address: true
+    #自定义实例在Eureka中显示的服务名称
+    instance-id: ${spring.cloud.client.ip-address}:${spring.application.name}:${server.port}
+    #服务提供者续约配置，续约间隔时间，默认为30秒
+    lease-renewal-interval-in-seconds: 30
+    #租约到期时间，默认为90秒。服务超过90秒没有发生心跳（报活），EurekaServer会将服务从列表中移除
+    lease-expiration-duration-in-seconds: 90
+  client:
+    service-url:
+      #Eureka注册中心注册链接,多个使用英文逗号间隔
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+    #服务消费者每隔多久拉取一次服务列表，默认30秒拉取一次
+    registry-fetch-interval-seconds: 30
+
+management:
+  metrics:
+    web:
+      server:
+        # 关闭⾃动检测请求 这里不关闭的话，会报一些错误。
+        auto-time-requests: false
