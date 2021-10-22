@@ -19,4 +19,46 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <finalName>eureka_server</finalName>
+        <plugins>
+            <!--
+            dockerfile构建容器:
+                mvn dockerfile:build / mvn package
+                mvn dockerfile:push / mvn deploy
+            -->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.13</version>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>push</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <!--image的信息
+                f1c2a763-270a-4f22-8502-0b86c5019f25
+                -->
+                <configuration>
+                    <username>modongning</username>
+                    <password>werppi234008</password>
+                    <repository>modongning/eureka_server</repository>
+                    <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+                    <tag>${project.version}</tag>
+                    <!--
+                        docker构建镜像过程中的参数，
+                        此处定义的JAR_FILE参数在执行docker build的时候会消费
+                    -->
+                    <buildArgs>
+                        <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+                    </buildArgs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
