@@ -177,7 +177,7 @@ http://127.0.0.1:8761
         -->
         <configuration>
             <username>modongning</username>
-            <password>werppi234008I</password>
+            <password>123456</password>
             <!--
                 这里改为docker.io的仓库名称
             -->
