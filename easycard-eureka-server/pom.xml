@@ -45,7 +45,7 @@
                 -->
                 <configuration>
                     <username>modongning</username>
-                    <password>werppi234008</password>
+                    <password>123456</password>
                     <repository>modongning/eureka_server</repository>
                     <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
                     <tag>${project.version}</tag>
