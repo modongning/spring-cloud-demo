@@ -205,4 +205,4 @@ mvn dockerfile:push
 
 ### docker.io仓库查看镜像
 
-https://hub.docker.com/repository
+https://hub.docker.com
