@@ -205,4 +205,4 @@ mvn dockerfile:push
 
 ### docker.io仓库查看镜像
 
-https://hub.docker.com/repository/docker/modongning/eureka_server
+https://hub.docker.com/repository/docker/xxx/eureka_server
