@@ -66,7 +66,7 @@ export DOCKER_HOST=tcp://localhost:2375
         -->
         <configuration>
             <username>modongning</username>
-            <password>werppi234008I</password>
+            <password>123456</password>
             <!--镜像名称-->
             <repository>easycard/${project.build.finalName}</repository>
             <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
@@ -205,4 +205,4 @@ mvn dockerfile:push
 
 ### docker.io仓库查看镜像
 
-https://hub.docker.com/repository/docker/modongning/eureka_server
+https://hub.docker.com
