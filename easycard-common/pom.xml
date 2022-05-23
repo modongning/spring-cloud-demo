@@ -13,4 +13,11 @@
     <artifactId>common</artifactId>
 
 
+    <dependencies>
+        <dependency>
+            <groupId>com.otoomo</groupId>
+            <artifactId>code-generator</artifactId>
+            <version>0.0.0</version>
+        </dependency>
+    </dependencies>
 </project>

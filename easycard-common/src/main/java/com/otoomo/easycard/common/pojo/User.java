@@ -1,15 +1,17 @@
 package com.otoomo.easycard.common.pojo;
 
-import com.otoomo.commonbase.annotation.XGenField;
-import com.otoomo.commonbase.annotation.XGenModel;
-import com.otoomo.commonbase.generater.ComponentType;
-import com.otoomo.commonbase.generater.Default;
-import com.otoomo.commonbase.generater.EnumData;
 
+import com.otoomo.codegenerator.annotation.XGenField;
+import com.otoomo.codegenerator.annotation.XGenModel;
+import com.otoomo.codegenerator.core.ComponentType;
+import com.otoomo.codegenerator.core.Default;
+import com.otoomo.codegenerator.core.EnumData;
+
+import java.io.Serializable;
 import java.util.Date;
 
 @XGenModel(comment = "用户")
-public class User {
+public class User implements Serializable {
     @XGenField(comment = "ID", key = true, uniqueKey = true)
     private Long id;
     @XGenField(comment = "用户编号", notNull = true, query = true)

@@ -20,7 +20,8 @@ import org.springframework.context.annotation.Bean;
 @EnableFeignClients
 public class UserServiceApplication {
     public static void main(String[] args) {
-        SpringApplication.run(UserServiceApplication.class, args);
+//        SpringApplication.run(UserServiceApplication.class, args);
+
     }
 
     //使用Feign后，Feign会自动引入RestTemplate到容器中进行使用，所有也不需要单独添加

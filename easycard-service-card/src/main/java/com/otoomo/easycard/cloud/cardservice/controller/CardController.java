@@ -1,7 +1,7 @@
 package com.otoomo.easycard.cloud.cardservice.controller;
 
 import com.google.common.collect.ImmutableList;
-import com.otoomo.commonbase.pojo.Result;
+import com.otoomo.easycard.common.pojo.Result;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

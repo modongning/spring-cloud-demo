@@ -1,7 +1,7 @@
 package com.otoomo.easycard.cloud.userservice.feignclient;
 
-import com.otoomo.commonbase.pojo.Result;
 import com.otoomo.easycard.cloud.userservice.feignclient.fallback.CardServiceFallback;
+import com.otoomo.easycard.common.pojo.Result;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;

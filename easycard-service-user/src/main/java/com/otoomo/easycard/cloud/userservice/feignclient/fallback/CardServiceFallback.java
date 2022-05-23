@@ -1,7 +1,7 @@
 package com.otoomo.easycard.cloud.userservice.feignclient.fallback;
 
-import com.otoomo.commonbase.pojo.Result;
 import com.otoomo.easycard.cloud.userservice.feignclient.CardServiceFeignClient;
+import com.otoomo.easycard.common.pojo.Result;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
